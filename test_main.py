@@ -44,8 +44,8 @@ def test_query(spark):
     result = query(
         spark,
         df,
-        "SELECT * FROM RemoteHealth WHERE Employee_ID = EMP0001",
-        "RemoteHealth",
+        "SELECT * FROM remote_health_1 WHERE Employee_ID = EMP0001",
+        "remote_health_1",
     )
     assert result is None
 

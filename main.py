@@ -17,7 +17,7 @@ def main():
     # extract data
     extract()
     # start spark session
-    spark = start_spark("RemoteHealth")
+    spark = start_spark("remote_health_1")
     # load data into dataframe
     df = load_data(spark)
     # example metrics
@@ -26,7 +26,12 @@ def main():
     query(
         spark,
         df,
-        "SELECT Industry, COUNT(Employee_ID) AS Number_Of_Employees FROM Employee_Data GROUP BY Industry ORDER BY Number_Of_Employees DESC;",
+        """SELECT Industry, COUNT(Employee_ID)
+        AS Number_Of_Employees 
+        FROM remote_health_1 
+        GROUP BY Industry 
+        ORDER BY Number_Of_Employees DESC;""",
+        "remote_health_1",
     )
     # example transform
     example_transform(df)

@@ -7,7 +7,7 @@ import requests
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import when, col
 
-from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DateType
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 
 LOG_FILE = "pyspark_output.md"
 
@@ -35,9 +35,9 @@ def end_spark(spark):
 
 def extract(
     url="""
-   https://raw.githubusercontent.com/lilah-duboff/data-for-URLS/refs/heads/main/table_1_remote_work_mental_health_data.csv
+    https://raw.githubusercontent.com/lilah-duboff/data-for-URLS/refs/heads/main/table_1_remote_work_mental_health_data.csv
     """,
-    file_path="data/remote_health_1.csv",
+    file_path="data/table_1_remote_work_mental_health_data.csv",
     directory="data",
 ):
     """Extract a url to a file path"""
@@ -50,12 +50,16 @@ def extract(
     return file_path
 
 
-def load_data(spark, data="data/remote_health_1.csv", name="RemoteHealth"):
+def load_data(
+    spark,
+    data="data/table_1_remote_work_mental_health_data.csv",
+    name="remote_health_1",
+):
     """load data"""
     # data preprocessing by setting schema
     schema = StructType(
         [
-            StructField("Employee_ID,", StringType(), True),
+            StructField("Employee_ID", StringType(), True),
             StructField("Age", IntegerType(), True),
             StructField("Gender", StringType(), True),
             StructField("Job_Role", StringType(), True),
@@ -68,7 +72,7 @@ def load_data(spark, data="data/remote_health_1.csv", name="RemoteHealth"):
         ]
     )
 
-    df = spark.read.option("header", "true").schema(schema).csv(data)
+    df = spark.read.option("header", "false").schema(schema).csv(data)
 
     log_output("load data", df.limit(10).toPandas().to_markdown())
 
@@ -104,7 +108,7 @@ def example_transform(df):
         "Occupation_Category",
         when(conditions[0], categories[0])
         .when(conditions[1], categories[1])
-        .otherwise("Hybrid"),
+        .otherwise("Other"),
     )
 
     log_output("transform data", df.limit(10).toPandas().to_markdown())
