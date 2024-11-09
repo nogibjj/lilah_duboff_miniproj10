@@ -11,7 +11,6 @@ from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 
 LOG_FILE = "pyspark_output.md"
 
-
 def log_output(operation, output, query=None):
     """adds to a markdown file"""
     with open(LOG_FILE, "a") as file:
@@ -34,9 +33,7 @@ def end_spark(spark):
 
 
 def extract(
-    url="""
-    https://raw.githubusercontent.com/lilah-duboff/data-for-URLS/refs/heads/main/table_1_remote_work_mental_health_data.csv
-    """,
+    url="https://raw.githubusercontent.com/lilah-duboff/data-for-URLS/refs/heads/main/table_1_remote_work_mental_health_data.csv",
     file_path="data/table_1_remote_work_mental_health_data.csv",
     directory="data",
 ):
