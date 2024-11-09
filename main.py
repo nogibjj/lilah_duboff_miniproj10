@@ -17,7 +17,7 @@ def main():
     # extract data
     extract()
     # start spark session
-    spark = start_spark("DailyShowGuests")
+    spark = start_spark("RemoteHealth")
     # load data into dataframe
     df = load_data(spark)
     # example metrics
@@ -26,8 +26,7 @@ def main():
     query(
         spark,
         df,
-        "SELECT YEAR, COUNT(*) AS guest_count FROM guests GROUP BY YEAR ORDER BY YEAR",
-        "guests",
+        "SELECT Industry, COUNT(Employee_ID) AS Number_Of_Employees FROM Employee_Data GROUP BY Industry ORDER BY Number_Of_Employees DESC;",
     )
     # example transform
     example_transform(df)

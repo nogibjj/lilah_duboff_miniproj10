@@ -1,18 +1,13 @@
 """
 library functions
 """
+
 import os
 import requests
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import when, col
 
-from pyspark.sql.types import (
-     StructType, 
-     StructField, 
-     IntegerType, 
-     StringType, 
-     DateType
-)
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DateType
 
 LOG_FILE = "pyspark_output.md"
 
@@ -21,28 +16,28 @@ def log_output(operation, output, query=None):
     """adds to a markdown file"""
     with open(LOG_FILE, "a") as file:
         file.write(f"The operation is {operation}\n\n")
-        if query: 
+        if query:
             file.write(f"The query is {query}\n\n")
         file.write("The truncated output is: \n\n")
         file.write(output)
         file.write("\n\n")
 
 
-
-
 def start_spark(appName):
     spark = SparkSession.builder.appName(appName).getOrCreate()
     return spark
+
 
 def end_spark(spark):
     spark.stop()
     return "stopped spark session"
 
+
 def extract(
     url="""
-   https://github.com/fivethirtyeight/data/blob/master/daily-show-guests/daily_show_guests.csv?raw=true 
+   https://raw.githubusercontent.com/lilah-duboff/data-for-URLS/refs/heads/main/table_1_remote_work_mental_health_data.csv
     """,
-    file_path="data/serve_times.csv",
+    file_path="data/remote_health_1.csv",
     directory="data",
 ):
     """Extract a url to a file path"""
@@ -51,20 +46,27 @@ def extract(
     with requests.get(url) as r:
         with open(file_path, "wb") as f:
             f.write(r.content)
- 
 
     return file_path
 
-def load_data(spark, data="data/serve_times.csv", name="DailyShowGuests"):
+
+def load_data(spark, data="data/remote_health_1.csv", name="RemoteHealth"):
     """load data"""
     # data preprocessing by setting schema
-    schema = StructType([
-        StructField("YEAR", IntegerType(), True),
-        StructField("GoogleKnowlege_Occupation", StringType(), True),
-        StructField("Show", DateType(), True),
-        StructField("Group", StringType(), True),
-        StructField("Raw_Guest_List", StringType(), True)
-    ])
+    schema = StructType(
+        [
+            StructField("Employee_ID,", StringType(), True),
+            StructField("Age", IntegerType(), True),
+            StructField("Gender", StringType(), True),
+            StructField("Job_Role", StringType(), True),
+            StructField("Industry", StringType(), True),
+            StructField("Years_of_Experience", IntegerType(), True),
+            StructField("Work_Location", StringType(), True),
+            StructField("Hours_Worked_Per_Week", IntegerType(), True),
+            StructField("Number_of_Virtual_Meetings", IntegerType(), True),
+            StructField("Work_Life_Balance_Rating", IntegerType(), True),
+        ]
+    )
 
     df = spark.read.option("header", "true").schema(schema).csv(data)
 
@@ -73,7 +75,7 @@ def load_data(spark, data="data/serve_times.csv", name="DailyShowGuests"):
     return df
 
 
-def query(spark, df, query, name): 
+def query(spark, df, query, name):
     """queries using spark sql"""
     df = df.createOrReplaceTempView(name)
 
@@ -81,26 +83,29 @@ def query(spark, df, query, name):
 
     return spark.sql(query).show()
 
+
 def describe(df):
     summary_stats_str = df.describe().toPandas().to_markdown()
     log_output("describe data", summary_stats_str)
 
     return df.describe().show()
 
+
 def example_transform(df):
     """does an example transformation on a predefiend dataset"""
     conditions = [
-        (col("GoogleKnowlege_Occupation") == "actor")
-          | (col("GoogleKnowlege_Occupation") == "actress"),
-        (col("GoogleKnowlege_Occupation") == "comedian") 
-        | (col("GoogleKnowlege_Occupation") == "comic"),
+        (col("Work_Location") == "Hybrid") | (col("Work_Location") == "Onsite"),
+        (col("Work_Location") == "Remote"),
     ]
 
-    categories = ["Acting", "Comedy"]
+    categories = ["Onsite", "Remote"]
 
-    df = df.withColumn("Occupation_Category", when(
-        conditions[0], categories[0]
-        ).when(conditions[1], categories[1]).otherwise("Other"))
+    df = df.withColumn(
+        "Occupation_Category",
+        when(conditions[0], categories[0])
+        .when(conditions[1], categories[1])
+        .otherwise("Hybrid"),
+    )
 
     log_output("transform data", df.limit(10).toPandas().to_markdown())
 

@@ -2,6 +2,7 @@
 Test goes here
 
 """
+
 import os
 import pytest
 from mylib.lib import (
@@ -41,7 +42,10 @@ def test_describe(spark):
 def test_query(spark):
     df = load_data(spark)
     result = query(
-        spark, df, "SELECT * FROM DailyShowGuests WHERE YEAR = 1999", "DailyShowGuests"
+        spark,
+        df,
+        "SELECT * FROM RemoteHealth WHERE Employee_ID = EMP0001",
+        "RemoteHealth",
     )
     assert result is None
 
