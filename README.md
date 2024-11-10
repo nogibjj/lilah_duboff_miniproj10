@@ -46,7 +46,7 @@
 
 ##### Next, the describe function performs the pandas .describe method to generate summary statistics from the dataset. As some of it is numerical and some is categorical, there are sections of the table that are purposefully blank. In particular, we are able to get the mean, standard deviation, min, and max of the employees' age, number of years of experience, the number of hours they worked per week, the number of virtual meetings per week, and how they would rate their work-life balance.
 
-
+#### Table 2: Descriptive Statistics for the Dataset
 |    | summary   | Employee_ID   |      Age | Gender            | Job_Role          | Industry   |   Years_of_Experience | Work_Location   |   Hours_Worked_Per_Week |   Number_of_Virtual_Meetings |   Work_Life_Balance_Rating |
 |---:|:----------|:--------------|---------:|:------------------|:------------------|:-----------|----------------------:|:----------------|------------------------:|-----------------------------:|---------------------------:|
 |  0 | count     | 101           | 100      | 101               | 101               | 101        |              100      | 101             |                100      |                    100       |                  100       |
@@ -63,7 +63,7 @@
 #### Main Query Code
 ![alt text](readme_screenshots/main_query.png)
 
-#### Table 1: Sample Query Output
+#### Table 2: Sample Query Output
 |    | Industry      |   Number_Of_Employees |
 |---:|:--------------|----------------------:|
 |  0 | IT            |                    20 |
