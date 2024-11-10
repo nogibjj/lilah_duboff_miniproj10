@@ -7,7 +7,7 @@ from mylib.lib import (
     load_data,
     describe,
     query,
-    example_transform,
+    transform,
     start_spark,
     end_spark,
 )
@@ -34,7 +34,7 @@ def main():
         "remote_health_1",
     )
     # example transform
-    example_transform(df)
+    transform(df)
     # end spark session
     end_spark(spark)
 

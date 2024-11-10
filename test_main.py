@@ -10,7 +10,7 @@ from mylib.lib import (
     load_data,
     describe,
     query,
-    example_transform,
+    transform,
     start_spark,
     end_spark,
 )
@@ -44,7 +44,7 @@ def test_query(spark):
     result = query(
         spark,
         df,
-        "SELECT * FROM remote_health_1 WHERE Employee_ID = EMP0001",
+        "SELECT * FROM remote_health_1 WHERE Employee_ID = 'EMP0001'",
         "remote_health_1",
     )
     assert result is None
@@ -52,7 +52,7 @@ def test_query(spark):
 
 def test_example_transform(spark):
     df = load_data(spark)
-    result = example_transform(df)
+    result = transform(df)
     assert result is None
 
 

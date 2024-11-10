@@ -1,37 +1,41 @@
-[![CI](https://github.com/nogibjj/python-ruff-template/actions/workflows/cicd.yml/badge.svg)](https://github.com/nogibjj/python-ruff-template/actions/workflows/cicd.yml)
-## Template for Python projects with RUFF linter
-
-![1 15_rust_built_python_tools](https://github.com/nogibjj/python-ruff-template/assets/58792/db5f7bda-a977-4c67-acbe-a70fe034fbdf)
 
 
+![alt text](passing_tests.png)
 
-1. First thing to do on launch is to open a new shell and verify virtualenv is sourced.
+# Mini Project 10: PySpark Data Processing
+---
+##### The purpose of this project is to utilize PySpark to complete a data analysis on a large dataset (100+ rows). The data utilized in this project is a column-wise subset of a free Kaggle dataset. The csv includes information on demographics of employees in a variety of industries, the number of hours they work per week, whether their work is hybrid or remote, and whether or not they experience symptoms of mental illness. 
+---
+### Structure for this Project
+---
+- .devcontainer
+    - devcontainer.json
+    - Dockerfile
+- .github
+    - cicd.yml
+- data
+    - table_1_remote_work_mental_health.csv
+- mylib
+    - lib.py
+- Dockerfile
+- License
+- main.py
+- Makefile
+- passing_tests.png
+- pyspark_output.md (generated markdown file)
+- README.md
+- repeat.sh
+- requirements.txt
+- setup.sh
+- test_main.py
 
-Things included are:
 
-* `Makefile`
 
-* `Pytest`
 
-* `pandas`
 
-* `Ruff`:  
 
-Run `make lint` which runs `ruff check`.  You can find out more info on [Ruff here](https://github.com/astral-sh/ruff).
 
-* `Dockerfile`
 
-* `GitHub copilot`
-
-* `jupyter` and `ipython` 
-
-* A base set of libraries for devops and web
-
-* `githubactions`
-
-## References
-
-![1 1-function-essence-of-programming](https://github.com/nogibjj/python-ruff-template/assets/58792/f7f33cd3-cff5-4014-98ea-09b6a29c7557)
 
 
 

@@ -92,7 +92,7 @@ def describe(df):
     return df.describe().show()
 
 
-def example_transform(df):
+def transform(df):
     """does an example transformation on a predefiend dataset"""
     conditions = [
         (col("Work_Location") == "Hybrid") | (col("Work_Location") == "Onsite"),
