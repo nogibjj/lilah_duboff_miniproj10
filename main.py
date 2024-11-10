@@ -1,5 +1,5 @@
 """
-Main cli or app entry point
+Main script
 """
 
 from mylib.lib import (

@@ -1,5 +1,5 @@
 """
-library functions
+Library functions for ETL and queries
 """
 
 import os
@@ -11,8 +11,9 @@ from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 
 LOG_FILE = "pyspark_output.md"
 
+
 def log_output(operation, output, query=None):
-    """adds to a markdown file"""
+    """Generates a markdown file for output"""
     with open(LOG_FILE, "a") as file:
         file.write(f"The operation is {operation}\n\n")
         if query:
@@ -37,7 +38,7 @@ def extract(
     file_path="data/table_1_remote_work_mental_health_data.csv",
     directory="data",
 ):
-    """Extract a url to a file path"""
+    """Extracts a url to a file path"""
     if not os.path.exists(directory):
         os.makedirs(directory)
     with requests.get(url) as r:
@@ -52,7 +53,7 @@ def load_data(
     data="data/table_1_remote_work_mental_health_data.csv",
     name="remote_health_1",
 ):
-    """load data"""
+    """Loads data into file"""
     # data preprocessing by setting schema
     schema = StructType(
         [
@@ -71,13 +72,13 @@ def load_data(
 
     df = spark.read.option("header", "false").schema(schema).csv(data)
 
-    log_output("load data", df.limit(10).toPandas().to_markdown())
+    log_output("Loading data", df.limit(10).toPandas().to_markdown())
 
     return df
 
 
 def query(spark, df, query, name):
-    """queries using spark sql"""
+    """Queries using spark, puts into md file"""
     df = df.createOrReplaceTempView(name)
 
     log_output("query data", spark.sql(query).toPandas().to_markdown(), query)
@@ -86,28 +87,31 @@ def query(spark, df, query, name):
 
 
 def describe(df):
+    """Generates summary statistics to md file"""
     summary_stats_str = df.describe().toPandas().to_markdown()
-    log_output("describe data", summary_stats_str)
+    log_output("Describing data", summary_stats_str)
 
     return df.describe().show()
 
 
 def transform(df):
-    """does an example transformation on a predefiend dataset"""
+    """Transformation on the data"""
     conditions = [
-        (col("Work_Location") == "Hybrid") | (col("Work_Location") == "Onsite"),
-        (col("Work_Location") == "Remote"),
+        (col("Industry") == "IT") | (col("Industry") == "Healthcare"),
+        (col("Industry") == "Consulting") | (col("Industry") == "Finance"),
+        (col("Industry") == "Education") | (col("Industry") == "Retail"),
+        (col("Industry") == "Manufacturing") | (col("Industry") == "Industry"),
     ]
 
-    categories = ["Onsite", "Remote"]
+    categories = ["IT", "Healthcare", "Consulting"]
 
     df = df.withColumn(
-        "Occupation_Category",
+        "Top Industries",
         when(conditions[0], categories[0])
         .when(conditions[1], categories[1])
         .otherwise("Other"),
     )
 
-    log_output("transform data", df.limit(10).toPandas().to_markdown())
+    log_output("Transforming data", df.limit(10).toPandas().to_markdown())
 
     return df.show()
